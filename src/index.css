@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+.state {
+    transition: transform .17s;
+}
+
+.state:hover {
+    background-color: #616b7a;
+    transform: scale(1.07);
+}
+
+.state:active {
+    transform: scale(.93);
+}
+
+.addtime {
+    transition: transform .13s;
+}
+
+.addtime:hover {
+    background-color: blue;
+    transform: scale(1.07);
+}
+
+.addtime:active {
+    transform: scale(.93);
+}
+
+.start-btn {
+    background: rgb(3, 194, 66);
+    transition: transform .15s;
+}
+
+.start-btn:hover {
+    background-color: rgb(32, 177, 19);
+    transform: scale(1.07);
+}
+
+.start-btn:active {
+    transform: scale(.93);
+}
+
+.task-btn {
+    transition: transform .11s;
+}
+
+.task-btn:hover {
+    transform: scale(1.01);
+}
+
+.task-btn:active {
+    transform: scale(.95);
+}
