@@ -2,11 +2,7 @@
 
 .state {
     transition: transform .17s;
-}
-
-.state:hover {
-    background-color: #616b7a;
-    transform: scale(1.07);
+    background-color: #9e707e;
 }
 
 .state:active {
@@ -27,7 +23,7 @@
 }
 
 .start-btn {
-    background: rgb(3, 194, 66);
+    background: #C38D9E;
     transition: transform .15s;
 }
 
@@ -37,6 +33,7 @@
 }
 
 .start-btn:active {
+    background: #C38D9E;
     transform: scale(.93);
 }
 
