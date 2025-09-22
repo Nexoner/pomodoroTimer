@@ -4,54 +4,86 @@ import pc from './../assets/laptop_mac_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.pn
 import chill from './../assets/relax_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png'
 import { useEffect, useState } from 'react'
 
-export default function PomodoroContainer() {
-    const [chil, setChill] = useState(0)
-    const [time, setTime] = useState(1500);
-    const [isRunning, setIsRunning] = useState(false);
+const stages = [
+    { chill: 1, time: 300 },   // 5 минут
+    { chill: 2, time: 1500 },  // 25 минут
+    { chill: 3, time: 300 },   // 5 минут
+    { chill: 4, time: 1500 },  // 25 минут
+    { chill: 5, time: 300 },   // 5 минут
+    { chill: 6, time: 1500 },  // 25 минут
+    { chill: 0, time: 900 },   // 15 минут (длинный отдых)
+];
 
+export default function PomodoroContainer() {
+    const [chil, setChill] = useState(() => {
+    const saved = localStorage.getItem("pomodoroState");
+    return saved ? JSON.parse(saved).chil : 0;
+    });
+
+    const [time, setTime] = useState(() => {
+    const saved = localStorage.getItem("pomodoroState");
+    return saved ? JSON.parse(saved).time : 1500;
+    });
+
+    const [isRunning, setIsRunning] = useState(() => {
+    const saved = localStorage.getItem("pomodoroState");
+    return saved ? JSON.parse(saved).isRunning : false;
+    });
+
+    //востановление при старте из local storage
+    useEffect(() => {
+        const saved = localStorage.getItem('pomodoroState');
+        if (saved) {
+            const { chil, time, isRunning } = JSON.parse(saved);
+            setChill(chil);
+            setTime(time);
+            setIsRunning(isRunning);
+        }
+    }, [])
+
+    //логика таймера
     useEffect(() => {
         let interval;
         if (isRunning && time > 0) {
             interval = setInterval(() => {
-            setTime((prev) => prev - 1);
+            setTime((prev) => (prev > 0 ? prev - 1 : 0));
             }, 1000);
-        } else if(time < 0) {
+        } else if (time < 0) {
             setTime(0)
         }
-        return() => clearInterval(interval);
+        return () => clearInterval(interval);
     }, [isRunning, time]);
+    // useEffect(() => {
+    //     let interval;
+    //     if (isRunning && time > 0) {
+    //         interval = setInterval(() => {
+    //         setTime((prev) => prev - 1);
+    //         }, 1000);
+    //     } else if(time < 0) {
+    //         setTime(0)
+    //     }
+    //     return() => clearInterval(interval);
+    // }, [isRunning, time]);
 
+    //сохранение состояния в local storage
     useEffect(() => {
-        if(time == 0 && chil == 0) {
-            setChill(1);
-            setTime(300);
-            setIsRunning(false);
-        } else if(time == 0 && chil == 1) {
-            setChill(2);
-            setTime(1500);
-            setIsRunning(false);
-        } else if(time == 0 && chil == 2) {
-            setChill(3);
-            setTime(300);
-            setIsRunning(false);
-        } else if(time == 0 && chil == 3) {
-            setChill(4);
-            setTime(1500);
-            setIsRunning(false);
-        } else if(time == 0 && chil == 4) {
-            setChill(5);
-            setTime(300);
-            setIsRunning(false);
-        } else if(time == 0 && chil == 5) {
-            setChill(6);
-            setTime(1500);
-            setIsRunning(false);
-        } else if(time == 0 && chil == 6) {
-            setChill(0);
-            setTime(900);
+        localStorage.setItem('pomodoroState', JSON.stringify({
+            chil,
+            time,
+            isRunning
+        }));
+    }, [chil, time, isRunning])
+
+    //логика помодоро
+    useEffect(() => {
+        if (time === 0) {
+            const currentIndex = stages.findIndex(s => s.chill === chil);
+            const nextIndex = (currentIndex + 1) % stages.length;
+            setChill(stages[nextIndex].chill);
+            setTime(stages[nextIndex].time);
             setIsRunning(false);
         }
-    }, [time, chil])
+    }, [time, chil]);
 
     const resetTimer = () => {
     setTime(1500);
@@ -60,7 +92,7 @@ export default function PomodoroContainer() {
 
     const startTimer = () => {
         setIsRunning((prev) => !prev);
-        console.log(time)
+        // console.log(time)
     }
 
     const addTime = (t) => {
@@ -131,7 +163,7 @@ export default function PomodoroContainer() {
                     </div>
                     <div className="timer-con m-0 p-12 mb-50 border-3 rounded-3xl bg-[#E27D60]">
                         <h1 className="timer font-extrabold text-6xl">{formatTime(time)}</h1>
-                        <button onClick={startTimer} className="start-btn font-bold border-2 rounded-2xl w-full h-auto p-1">Start</button>
+                        <button onClick={startTimer} className="start-btn font-bold border-2 rounded-2xl w-full h-auto p-1">{isRunning ? "Stop" : "Start"}</button>
                         <p className='mt-9 text-2xl'>Add minutes:</p>
                         <div className="bar flex justify-center bg-[#C38D9E]">
                             <button onClick={() => addTime(-60)} className="addtime text-lg border-2 border-r-1 p-2 w-1/4 h-1/2">-1</button>
