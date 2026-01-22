@@ -8,4 +8,6 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  // Явно указываем, что Tailwind должен использовать tailwind.config.js
+  // Плагин @tailwindcss/vite автоматически читает tailwind.config.js из корня проекта
 })

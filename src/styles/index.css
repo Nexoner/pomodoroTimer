@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+:root {
+    /* Основные цвета из скриншота */
+    --bg-dark: #0f0c15;
+    --card-bg: #1a1625;
+    --accent-purple: #a855f7;
+    --accent-pink: #ec4899;
+    --text-main: #e2e8f0;
+    --text-dim: #94a3b8;
+    
+    /* Эффекты свечения */
+    --glow-purple: 0 0 15px rgba(168, 85, 247, 0.4);
+    --border-neon: 1px solid rgba(168, 85, 247, 0.3);
+    
+    /* Цвета с прозрачностью */
+    --accent-purple-50: rgba(168, 85, 247, 0.5);
+    --accent-pink-10: rgba(236, 72, 153, 0.1);
+}
+
+/* Кастомные цвета фона */
+.bg-game-bg {
+    background-color: var(--bg-dark);
+}
+
+.bg-game-card {
+    background-color: var(--card-bg);
+}
+
+.bg-game-purple {
+    background-color: var(--accent-purple);
+}
+
+.bg-game-pink {
+    background-color: var(--accent-pink);
+}
+
+/* Кастомные цвета текста */
+.text-game-purple {
+    color: var(--accent-purple);
+}
+
+.text-game-pink {
+    color: var(--accent-pink);
+}
+
+/* Кастомные цвета границ */
+.border-game-purple {
+    border-color: var(--accent-purple);
+}
+
+.border-game-pink {
+    border-color: var(--accent-pink);
+}
+
+/* Кастомные тени */
+.shadow-neon {
+    box-shadow: var(--glow-purple);
+}
+
+.shadow-glow {
+    box-shadow: var(--glow-purple);
+}
+
+/* Акцент для чекбоксов */
+.accent-game-purple {
+    accent-color: var(--accent-purple);
+}
+
+/* Градиенты с прозрачностью для текста */
+.gradient-text-purple {
+    background: linear-gradient(to bottom, white, var(--accent-purple-50));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Альтернативные варианты для совместимости */
+.bg-gradient-to-b.from-white.to-game-purple-50 {
+    background: linear-gradient(to bottom, white, var(--accent-purple-50));
+}
+
+.bg-gradient-to-b.from-white.to-game-purple\/50 {
+    background: linear-gradient(to bottom, white, var(--accent-purple-50));
+}
+
+/* Hover эффекты с прозрачностью - используем escape для Tailwind синтаксиса */
+.hover\:border-game-purple\/50:hover {
+    border-color: var(--accent-purple-50);
+}
+
+.hover\:bg-game-pink\/10:hover {
+    background-color: var(--accent-pink-10);
+}
+
+/* Дополнительные утилиты для границ с прозрачностью */
+.border-game-purple-50 {
+    border-color: var(--accent-purple-50);
+}
+
+.bg-game-pink-10 {
+    background-color: var(--accent-pink-10);
+}
+
+.hover-border-game-purple-50:hover {
+    border-color: var(--accent-purple-50);
+}
+
+.hover-bg-game-pink-10:hover {
+    background-color: var(--accent-pink-10);
+}
+
+.state {
+    transition: transform .17s;
+    background-color: #9e707e;
+}
+
+.state:active {
+    transform: scale(.93);
+}
+
+.addtime {
+    transition: transform .13s;
+}
+
+.addtime:hover {
+    background-color: blue;
+    transform: scale(1.07);
+}
+
+.addtime:active {
+    transform: scale(.93);
+}
+
+.start-btn {
+    background: #C38D9E;
+    transition: transform .15s;
+}
+
+.start-btn:hover {
+    background-color: rgb(32, 177, 19);
+    transform: scale(1.07);
+}
+
+.start-btn:active {
+    background: #C38D9E;
+    transform: scale(.93);
+}
+
+.task-btn {
+    transition: transform .11s;
+}
+
+.task-btn:hover {
+    transform: scale(1.01);
+}
+
+.task-btn:active {
+    transform: scale(.95);
+}
