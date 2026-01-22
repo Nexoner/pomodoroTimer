@@ -2,8 +2,9 @@ import arrow from './../assets/arrow.svg'
 import pc from './../assets/laptop_mac_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png'
 import chillIcon from './../assets/relax_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux' // Для будущего начисления XP
+import { useSelector, useDispatch } from 'react-redux' // Для будущего начисления XP
 import { addXp } from '../store/userSlice' // Твой экшен для опыта
+import PomodoroTimer from './PomodoroTimer'
 
 const stages = [
     { chill: 1, time: 300 },   
@@ -17,6 +18,12 @@ const stages = [
 
 export default function PomodoroContainer() {
     const dispatch = useDispatch();
+
+    // Получаем данные игрока из Redux
+    const { level, xp, requiredXp } = useSelector((state) => state.user);
+    
+    // Вычисляем процент заполнения шкалы
+    const xpPercentage = Math.min(100, Math.floor((xp / requiredXp) * 100));
     
     // Состояния (оставляем твою логику с localStorage)
     const [chill, setChill] = useState(() => {
@@ -64,7 +71,13 @@ export default function PomodoroContainer() {
     // Функции форматирования и управления (оставляем твои)
     const startTimer = () => setIsRunning(!isRunning);
     const resetTimer = () => { setTime(1500); setIsRunning(false); };
-    const addMinutes = (m) => setTime(prev => prev + (m * 60));
+    const addMinutes = (m) => {
+        setTime(prev => {
+            const newTime = prev + (m * 60);
+            // Предотвращаем отрицательное время
+            return Math.max(0, newTime);
+        });
+    };
 
     function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
@@ -74,66 +87,75 @@ export default function PomodoroContainer() {
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen bg-game-bg p-6 gap-6 font-sans text-white">
-            
-            {/* Левая панель: TASKS (To-Do List) */}
-            <div className="flex-1 bg-game-card rounded-2xl border border-white/10 p-6 flex flex-col shadow-neon">
-                <h2 className="text-xl font-bold mb-6 tracking-widest uppercase text-game-purple">Quest Log</h2>
-                
-                <ul className="flex-1 space-y-4 overflow-y-auto mb-6">
-                    {['Task 1', 'Task 2', 'Task 3'].map((task, i) => (
-                        <li key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-transparent hover-border-game-purple-50 transition-all">
-                            <input type="checkbox" className="w-5 h-5 accent-game-purple" />
-                            <span>{task}</span>
-                        </li>
-                    ))}
-                </ul>
 
-                <form className="flex gap-2">
-                    <input 
-                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:border-game-purple" 
-                        placeholder="New mission..."
-                        type="text" 
-                    />
-                    <button className="bg-game-purple p-3 rounded-lg hover:scale-105 transition-transform">
-                        <img className="w-5" src={arrow} alt="add" />
-                    </button>
-                </form>
+<div className="flex-1 flex flex-col gap-6">
+                
+                {/* --- НОВЫЙ БЛОК: PROFILE HEADER --- */}
+                <div className="bg-game-card rounded-2xl border border-white/10 p-5 shadow-neon">
+                    <div className="flex items-center gap-4 mb-4">
+                        {/* Аватар с неоновым ободком */}
+                        <div className="relative">
+                            <div className="w-16 h-16 rounded-full border-2 border-game-purple overflow-hidden shadow-glow">
+                                <img 
+                                    src="https://i.pinimg.com/736x/76/a9/3c/76a93c9d08de3e469e512883ae252e83.jpg" 
+                                    alt="Avatar" 
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div className="absolute -bottom-1 -right-1 bg-game-purple text-[10px] font-bold px-2 py-0.5 rounded-full border border-game-bg">
+                                LVL {level}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 className="text-lg font-bold tracking-tight">Shadow Monarch</h3>
+                            <p className="text-xs text-game-purple font-mono uppercase tracking-widest">Player Class: Programmer</p>
+                        </div>
+                    </div>
+
+                    {/* Шкала опыта */}
+                    <div className="space-y-1.5">
+                        <div className="flex justify-between text-[10px] uppercase tracking-tighter font-bold">
+                            <span className="text-game-purple">Experience</span>
+                            <span>{xp} / {requiredXp} XP</span>
+                        </div>
+                        <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                            <div 
+                                className="h-full bg-gradient-to-r from-game-purple to-game-pink transition-all duration-500 ease-out progress-glow"
+                                style={{ width: `${xpPercentage}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                {/* --- КОНЕЦ БЛОКА PROFILE --- */}
+
+                {/* TASKS (To-Do List) */}
+                <div className="flex-1 bg-game-card rounded-2xl border border-white/10 p-6 flex flex-col shadow-neon">
+                    <h2 className="text-xl font-bold mb-6 tracking-widest uppercase text-game-purple">Quest Log</h2>
+                    {/* ... твой текущий список задач и форма ... */}
+                    <ul className="flex-1 space-y-4 overflow-y-auto mb-6">
+                        {['Code Review', 'Learn Redux', 'Workout'].map((task, i) => (
+                            <li key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-transparent hover:border-game-purple/30 transition-all group">
+                                <input type="checkbox" className="w-5 h-5 accent-game-purple cursor-pointer" />
+                                <span className="group-hover:text-game-purple transition-colors">{task}</span>
+                            </li>
+                        ))}
+                    </ul>
+                    <form className="flex gap-2">
+                        <input 
+                            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:border-game-purple transition-colors" 
+                            placeholder="New mission..."
+                            type="text" 
+                        />
+                        <button className="bg-game-purple p-3 rounded-lg hover:scale-105 transition-transform active:scale-95 shadow-glow">
+                            <img className="w-5" src={arrow} alt="add" />
+                        </button>
+                    </form>
+                </div>
             </div>
 
             {/* Правая панель: TIMER */}
-            <div className="flex-[2] bg-game-card rounded-2xl border border-white/10 p-8 flex flex-col items-center justify-center shadow-neon">
-                
-                {/* Переключатель режимов */}
-                <div className="flex bg-white/5 p-1 rounded-xl mb-12 border border-white/10">
-                    <button onClick={() => {setChill(0); setTime(1500)}} className={`px-6 py-2 rounded-lg flex gap-2 items-center transition-all ${chill === 0 ? 'bg-game-purple shadow-glow' : 'hover:bg-white/5'}`}>
-                        <img src={pc} className="w-5" alt="" /> Work
-                    </button>
-                    <button onClick={() => {setChill(1); setTime(300)}} className={`px-6 py-2 rounded-lg flex gap-2 items-center transition-all ${chill === 1 ? 'bg-game-pink shadow-glow' : 'hover:bg-white/5'}`}>
-                        <img src={chillIcon} className="w-5" alt="" /> Break
-                    </button>
-                </div>
-
-                {/* Циферблат */}
-                <div className="relative flex flex-col items-center">
-                    <div className="text-8xl font-black mb-8 tracking-tighter text-transparent bg-clip-text gradient-text-purple">
-                        {formatTime(time)}
-                    </div>
-                    
-                    <button 
-                        onClick={startTimer}
-                        className={`w-48 py-4 rounded-full font-bold uppercase tracking-widest transition-all ${isRunning ? 'border-2 border-game-pink text-game-pink hover-bg-game-pink-10' : 'bg-game-purple text-white shadow-glow hover:scale-105'}`}
-                    >
-                        {isRunning ? "Pause" : "Initiate"}
-                    </button>
-                </div>
-
-                {/* Управление временем */}
-                <div className="mt-12 flex gap-4">
-                    <button onClick={() => addMinutes(-5)} className="w-12 h-12 rounded-lg border border-white/10 hover:border-game-purple flex items-center justify-center">-5</button>
-                    <button onClick={resetTimer} className="w-12 h-12 rounded-lg border border-white/10 hover:border-game-purple flex items-center justify-center">↺</button>
-                    <button onClick={() => addMinutes(5)} className="w-12 h-12 rounded-lg border border-white/10 hover:border-game-purple flex items-center justify-center">+5</button>
-                </div>
-            </div>
+            <PomodoroTimer />
 
         </div>
     )
