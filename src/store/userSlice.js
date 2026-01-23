@@ -1,10 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-    level: 1,
-    xp: 0,
-    requiredXp: 10,
+// Функция загрузки состояния из localStorage
+const loadUserState = () => {
+    try {
+        const serializedState = localStorage.getItem('userState');
+        if (serializedState === null) {
+            return {
+                level: 1,
+                xp: 0,
+                requiredXp: 10,
+            };
+        }
+        return JSON.parse(serializedState);
+    } catch (err) {
+        console.error('Error loading user state from localStorage:', err);
+        return {
+            level: 1,
+            xp: 0,
+            requiredXp: 10,
+        };
+    }
 };
+
+const initialState = loadUserState();
 
 const userSlice = createSlice({
     name: 'user',
@@ -15,7 +33,7 @@ const userSlice = createSlice({
             if (state.xp >= state.requiredXp) {
                 state.level += 1;
                 state.xp -= state.requiredXp;
-                state.requiredXp = Math.floor(state.requiredXp * 2); 
+                state.requiredXp = Math.floor(state.requiredXp * 1.1); 
             }
         }
     }

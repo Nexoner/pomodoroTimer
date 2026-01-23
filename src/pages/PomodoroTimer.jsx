@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import pc from './../assets/laptop_mac_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png'
 import chillIcon from './../assets/relax_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png'
-import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux' // Для будущего начисления XP
+import { useDispatch } from 'react-redux' // Для будущего начисления XP
 import { addXp } from '../store/userSlice' // Твой экшен для опыта
 
 const stages = [
@@ -46,7 +45,7 @@ export default function PomodoroTimer() {
     useEffect(() => {
         if (time === 0 && isRunning) {
             // ПРИМЕР: Начисляем 25 XP за завершение сессии
-            dispatch(addXp(25)); 
+            dispatch(addXp(250000)); 
             
             const currentIndex = stages.findIndex(s => s.chill === chill);
             const nextIndex = (currentIndex + 1) % stages.length;
@@ -90,10 +89,10 @@ export default function PomodoroTimer() {
                 
                 {/* Переключатель режимов */}
                 <div className="flex bg-white/5 p-1 rounded-xl mb-12 border border-white/10">
-                    <button onClick={() => {setChill(0); setTime(1500)}} className={`px-6 py-2 rounded-lg flex gap-2 items-center transition-all ${chill === 0 ? 'bg-game-purple shadow-glow' : 'hover:bg-white/5'}`}>
+                    <button onClick={() => {setChill(0); setTime(1500)}} className={`px-6 py-2 rounded-lg flex gap-2 items-center transition-all ${chill%2 == 0 ? 'bg-game-purple shadow-glow' : 'hover:bg-white/5'}`}>
                         <img src={pc} className="w-5" alt="" /> Work
                     </button>
-                    <button onClick={() => {setChill(1); setTime(300)}} className={`px-6 py-2 rounded-lg flex gap-2 items-center transition-all ${chill === 1 ? 'bg-game-pink shadow-glow' : 'hover:bg-white/5'}`}>
+                    <button onClick={() => {setChill(1); setTime(300)}} className={`px-6 py-2 rounded-lg flex gap-2 items-center transition-all ${chill%2 !== 0 ? 'bg-game-pink shadow-glow' : 'hover:bg-white/5'}`}>
                         <img src={chillIcon} className="w-5" alt="" /> Break
                     </button>
                 </div>

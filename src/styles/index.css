@@ -23,6 +23,16 @@
     background-color: var(--bg-dark);
 }
 
+.progress-glow {
+    box-shadow: var(--glow-purple);
+}
+
+/* Градиент для прогресс-бара опыта */
+.xp-progress-bar {
+    background: linear-gradient(to right, var(--accent-purple), var(--accent-pink));
+    box-shadow: var(--glow-purple);
+}
+
 .bg-game-card {
     background-color: var(--card-bg);
 }

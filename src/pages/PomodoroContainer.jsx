@@ -1,8 +1,16 @@
 import PomodoroTimer from './PomodoroTimer'
 import ToDoList from './To-do'
+import { useSelector } from 'react-redux';
 
 
 export default function PomodoroContainer() {
+    // Получаем данные игрока из Redux
+    const { level, xp, requiredXp } = useSelector((state) => state.user);
+    
+    // Вычисляем процент заполнения шкалы
+    const xpPercentage = requiredXp > 0 
+        ? Math.min(100, Math.max(0, (xp / requiredXp) * 100))
+        : 0;
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen bg-game-bg p-6 gap-6 font-sans text-white">
@@ -40,8 +48,8 @@ export default function PomodoroContainer() {
                         </div>
                         <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
                             <div 
-                                className="h-full bg-gradient-to-r from-game-purple to-game-pink transition-all duration-500 ease-out progress-glow"
-                                style={{ width: `${xpPercentage}%` }}
+                                className="h-full xp-progress-bar transition-all duration-500 ease-out"
+                                style={{ width: `${xpPercentage}%`, minWidth: xpPercentage > 0 ? '2px' : '0' }}
                             ></div>
                         </div>
                     </div>
