@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import pc from './../assets/laptop_mac_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png'
 import chillIcon from './../assets/relax_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux' // Для будущего начисления XP
 import { addXp } from '../store/userSlice' // Твой экшен для опыта
 
@@ -60,7 +61,13 @@ export default function PomodoroTimer() {
         localStorage.setItem("pomodoroState", JSON.stringify({ chill, time, isRunning }));
     }, [chill, time, isRunning]);
 
-    // Функции форматирования и управления (оставляем твои)
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
+
+        // Функции форматирования и управления (оставляем твои)
     const startTimer = () => setIsRunning(!isRunning);
     const resetTimer = () => { setTime(1500); setIsRunning(false); };
     const addMinutes = (m) => {
