@@ -8,11 +8,11 @@
     --accent-pink: #ec4899;
     --text-main: #e2e8f0;
     --text-dim: #94a3b8;
-    
+
     /* Эффекты свечения */
     --glow-purple: 0 0 15px rgba(168, 85, 247, 0.4);
     --border-neon: 1px solid rgba(168, 85, 247, 0.3);
-    
+
     /* Цвета с прозрачностью */
     --accent-purple-50: rgba(168, 85, 247, 0.5);
     --accent-pink-10: rgba(236, 72, 153, 0.1);
@@ -166,4 +166,51 @@
 
 .task-btn:active {
     transform: scale(.95);
+}
+
+/* Custom RPG Animations */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 12s linear infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        filter: blur(8px);
+    }
+
+    50% {
+        opacity: 1;
+        filter: blur(12px);
+    }
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--accent-purple);
+    border-radius: 10px;
 }
